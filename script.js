@@ -1,19 +1,29 @@
-fetch("https://jsonplaceholder.typicode.com/users")
-.then(function(response){
-	return response.json();
-})
-.then(function(products){
-	let placeholder = document.querySelector('#tableBody');
+async function fetchProducts() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    const data = await response.json();
+    let placeholder = document.querySelector('#tableBody');
 	let out="";
-	for(let i=0;i<products.length;i++){
+	for(let i=0;i<data.length;i++){
 		out+=`
 		<tr>
-			<td>${products[i].id}</td>
-			<td>${products[i].name}</td>
-			<td>${products[i].email}</td>
-			<td>${products[i].address.street},${products[i].address.city},${products[i].address.zipcode}</td>
+			<td>${data[i].id}</td>
+			<td>${data[i].name}</td>
+			<td>${data[i].email}</td>
+			<td>${data[i].address.street},${data[i].address.city},${data[i].address.zipcode}</td>
 		</tr>
 		`;
 	}
 	placeholder.innerHTML=out;
-})
+    
+
+  }
+  catch (error) {
+    console.error(`Could not get products: ${error}`);
+  }
+}
+
+fetchProducts();
